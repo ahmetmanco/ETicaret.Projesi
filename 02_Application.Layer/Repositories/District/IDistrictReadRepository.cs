@@ -2,7 +2,7 @@
 
 namespace _02_Application.Layer.Repositories
 {
-    public interface IDistrictReadRepository : IWriteRepository<District>
+    public interface IDistrictReadRepository : IReadRepository<District>
     {
     }
 }

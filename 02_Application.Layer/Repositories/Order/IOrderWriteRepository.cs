@@ -2,7 +2,7 @@
 
 namespace _02_Application.Layer.Repositories
 {
-    internal interface IOrderWriteRepository : IWriteRepository<Order>
+    public interface IOrderWriteRepository : IWriteRepository<Order>
     {
     }
 }

@@ -2,7 +2,7 @@
 
 namespace _02_Application.Layer.Repositories
 {
-    public interface IOrderReadInvoiceFile : IReadRepository<Order>
+    public interface IOrderReadRepository : IReadRepository<Order>
     {
     }
 }
