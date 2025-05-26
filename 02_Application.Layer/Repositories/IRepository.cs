@@ -5,6 +5,6 @@ namespace _02_Application.Layer.Repositories
 {
     public interface IRepository <T> where T : BaseEntity
     {
-        public DbSet<T> Table { get; set; }
+        DbSet<T> Table { get; }
     }
 }

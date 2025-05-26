@@ -9,7 +9,7 @@ namespace _02_Application.Layer.Repositories
         bool UpdateAsync(T entity);
         bool Delete(T entity);
         bool DeleteRange(List<T> entities);
-        Task<bool> DeleteAsync(T entity);
-        Task<int> SaveAsync(); 
+        Task<bool> DeleteAsync(int id);
+        Task<int> SaveAsync();
     }
 }
