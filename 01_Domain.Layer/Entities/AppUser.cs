@@ -5,6 +5,7 @@ namespace _01_Domain.Layer.Entities
 {
     public class AppUser :  /*IdentityUser<Guid>,*/ BaseEntity
     {
+        public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime? BirthDate { get; set; }

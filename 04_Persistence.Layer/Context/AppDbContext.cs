@@ -28,6 +28,7 @@ namespace _04_Persistence.Layer.Context
             {
                 foreingKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
+
             
             base.OnModelCreating(builder);
         }

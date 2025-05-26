@@ -1,15 +1,15 @@
 ﻿using System.Text.Json.Serialization;
-using System;
+using _02_Application.Layer;
+using _02_Application.Layer.Validations.Product;
+using _03_Infrastructure.Layer;
+using _03_Infrastructure.Layer.Filters;
+using _03_Infrastructure.Layer.Services.Storage;
+using _04_Persistence.Layer.Context;
 using _04_Persistence.Layer.IoC;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using _03_Infrastructure.Layer.Services.Storage;
-using _03_Infrastructure.Layer;
-using _04_Persistence.Layer.Context;
-using Microsoft.EntityFrameworkCore;
 using FluentValidation.AspNetCore;
-using _02_Application.Layer.Validations.Product;
-using _03_Infrastructure.Layer.Filters;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +45,9 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 Console.WriteLine($"[Connection Test] {connectionString}");
 
 builder.Services.AddInfrastructureservices();
+builder.Services.AddApplicationServices();
+//builder.Services.AddPersistanceServices();
+
 builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(_02_Application.Layer.ServiceRegistration).Assembly);

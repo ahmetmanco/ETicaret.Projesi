@@ -1,9 +1,9 @@
-﻿using _02_Application.Layer.VMs;
+﻿using _02_Application.Layer.Features.Commands.Product.CreateProduct;
 using FluentValidation;
 
 namespace _02_Application.Layer.Validations.Product
 {
-    public class CreateProductValidation : AbstractValidator<CreateProductVM>
+    public class CreateProductValidation : AbstractValidator<CreateProductCommandRequest>
     {
         public CreateProductValidation()
         {

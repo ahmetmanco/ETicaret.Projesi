@@ -1,5 +1,5 @@
 ﻿using _01_Domain.Layer.Entities;
-using _02_Application.Layer.VMs;
+using _02_Application.Layer.Features.Commands.Product.CreateProduct;
 using AutoMapper;
 
 namespace _04_Persistence.Layer.Mapping
@@ -8,8 +8,7 @@ namespace _04_Persistence.Layer.Mapping
     {
         public Mapping()
         {
-            CreateMap<Product, CreateProductVM>().ReverseMap();
-            CreateMap<Product, UpdateProductVM>().ReverseMap();
+            CreateMap<Product, CreateProductCommandRequest>().ReverseMap();
         }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using _02_Application.Layer.Repositories.Costumer;
+﻿using _02_Application.Layer.Repositories.Costumer;
 using _02_Application.Layer.Repositories;
 using Autofac;
 using AutoMapper;
@@ -51,7 +46,7 @@ namespace _04_Persistence.Layer.IoC
 
             builder.Register(c =>
             {
-                //This resolves a new context that can be used later.
+                
                 var context = c.Resolve<IComponentContext>();
                 var config = context.Resolve<MapperConfiguration>();
                 return config.CreateMapper(context.Resolve);

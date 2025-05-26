@@ -2,7 +2,6 @@
 using _02_Application.Layer.Abstraction.Storage;
 using _02_Application.Layer.Abstraction.Storage.Azure;
 using _03_Infrastructure.Layer.Services.Storage;
-using _03_Infrastructure.Layer.Services.Storage.Azure;
 using _03_Infrastructure.Layer.Services.Storage.Local;
 using Microsoft.Extensions.DependencyInjection;
 
