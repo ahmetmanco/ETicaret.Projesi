@@ -1,5 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using MediatR;
+﻿
+using Microsoft.Extensions.DependencyInjection;
+
 namespace _02_Application.Layer
 {
     public static class ServiceRegistration
