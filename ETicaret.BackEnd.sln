@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "03_Infrastructure.Layer", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04_Persistence.Layer", "04_Persistence.Layer\04_Persistence.Layer.csproj", "{1F30F959-8B5E-47FE-AE4A-56B1722648C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05_WebApi.Layer", "05_WebApi.Layer\05_WebApi.Layer.csproj", "{286619D3-9AAD-400C-9C3D-EF8990E1D265}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{1F30F959-8B5E-47FE-AE4A-56B1722648C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F30F959-8B5E-47FE-AE4A-56B1722648C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F30F959-8B5E-47FE-AE4A-56B1722648C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{286619D3-9AAD-400C-9C3D-EF8990E1D265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{286619D3-9AAD-400C-9C3D-EF8990E1D265}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{286619D3-9AAD-400C-9C3D-EF8990E1D265}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{286619D3-9AAD-400C-9C3D-EF8990E1D265}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 		{D56BD9AC-3B9C-4B2E-9B22-73F318FA756A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{9AF8D2DF-0506-42D0-97EF-4FCAF4DFDB4A} = {7098D5F5-67BB-43C1-8DEA-245FD56651F0}
 		{1F30F959-8B5E-47FE-AE4A-56B1722648C9} = {7098D5F5-67BB-43C1-8DEA-245FD56651F0}
+		{286619D3-9AAD-400C-9C3D-EF8990E1D265} = {C993B853-8CBF-4ED5-8C2E-EF91AE1A4996}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4BA09F06-0EAA-4612-B2C0-E5FC80940B17}
