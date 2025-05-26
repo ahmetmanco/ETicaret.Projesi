@@ -1,5 +1,5 @@
-﻿
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MediatR;
 
 namespace _02_Application.Layer
 {
@@ -7,7 +7,10 @@ namespace _02_Application.Layer
     {
         public static void AddApplicationServices(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddMediatR(typeof(ServiceRegistration));
+            serviceCollection.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssembly(typeof(ServiceRegistration).Assembly);
+            });
         }
     }
 }

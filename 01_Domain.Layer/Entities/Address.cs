@@ -13,7 +13,6 @@ namespace _01_Domain.Layer.Entities
         public string Description { get; set; }
         public int DistrictId { get; set; }
         public District District { get; set; }
-        public Guid AppUserId { get; set; }
         public AppUser AppUser { get; set; }
 
     }

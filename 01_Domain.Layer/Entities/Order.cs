@@ -10,7 +10,7 @@ namespace _01_Domain.Layer.Entities
         public string Address { get; set; }
         public ICollection<Product> Products { get; set; }
         public Customer? Customer { get; set; }
-        public Guid AppUserId { get; set; }
+        public string AppUserId { get; set; }
         public AppUser AppUser { get; set; }
     }
 }
