@@ -15,13 +15,10 @@ namespace _05_WebApi.Layer.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IStorageService _storage;
         
-
-        public ProductController(IMediator mediator, IStorageService storage)
+        public ProductController(IMediator mediator)
         {
             _mediator = mediator;
-            _storage = storage;
         }
 
         [HttpGet]
