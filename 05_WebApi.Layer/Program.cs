@@ -8,74 +8,84 @@ using _04_Persistence.Layer.Context;
 using _04_Persistence.Layer.IoC;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using FluentValidation.AspNetCore;
+using Azure.Storage.Blobs;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// 1. Configuration (ConnectionStrings & Azure Storage)
 var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
+var azureBlobConnection = builder.Configuration.GetSection("Storage")["Azure"];
 
-builder.Services.AddControllers(options => options.Filters.Add<ValidationFilters>()).ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true).AddJsonOptions(o =>
+// 2. Services: MVC + JSON Options
+builder.Services.AddControllers(options =>
 {
-    o.JsonSerializerOptions.IncludeFields = true;
-    o.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+    options.Filters.Add<ValidationFilters>();
+})
+.ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true)
+.AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.IncludeFields = true;
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
 });
 
-//builder.Services.AddStorage();
-builder.Services.AddFluentValidation(conf =>
-conf.RegisterValidatorsFromAssemblyContaining<CreateProductValidation>());
+// 3. FluentValidation
+builder.Services.AddValidatorsFromAssemblyContaining<CreateProductValidation>();
 
+// 4. CORS
 builder.Services.AddCors(opt =>
-  opt.AddDefaultPolicy(
-      policy =>
-      policy.WithOrigins("http://localhost:4200", "https://localhost:4200")
-      .AllowAnyHeader()
-      .AllowAnyMethod()
-  )
-);
-//AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+{
+    opt.AddDefaultPolicy(policy =>
+        policy.WithOrigins("http://localhost:4200", "https://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod());
+});
 
-builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
-
-// PostgreSQL için DbContext’i yapýlandýr
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+// 5. PostgreSQL DbContext
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-Console.WriteLine($"[Connection Test] {connectionString}");
 
+// 6. Application Layers
 builder.Services.AddInfrastructureservices();
 builder.Services.AddApplicationServices();
-//builder.Services.AddPersistanceServices();
 
+// 7. Blob Storage Client (Azure)
+builder.Services.AddSingleton(_ => new BlobServiceClient(azureBlobConnection));
+builder.Services.AddStorage<AzureStorage>();
+
+// 8. MediatR (CQRS)
 builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(_02_Application.Layer.ServiceRegistration).Assembly);
 });
-//builder.Services.AddStorage<LocalStorage>();
-builder.Services.AddStorage<AzureStorage>();
 
+// 9. Autofac Dependency Injection
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
+builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
-    builder.RegisterModule(new DependencyResolver());
+    containerBuilder.RegisterModule(new DependencyResolver());
 });
 
+// 10. Swagger (Opsiyonel)
+// builder.Services.AddEndpointsApiExplorer();
+// builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// 11. Middleware pipeline
 if (app.Environment.IsDevelopment())
 {
-    //app.UseSwagger();
-    //app.UseSwaggerUI();
+    // app.UseSwagger();
+    // app.UseSwaggerUI();
 }
-app.UseRouting();
-app.UseCors();
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseAuthorization();
 
+app.UseHttpsRedirection();
+app.UseStaticFiles();        // wwwroot kullanıyorsan
+app.UseRouting();
+app.UseCors();               // CORS ayarları
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
