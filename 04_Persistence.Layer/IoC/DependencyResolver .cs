@@ -5,6 +5,8 @@ using AutoMapper;
 using _02_Application.Layer.Repositories.AppUser;
 using _04_Persistence.Layer.Repositories;
 using _04_Persistence.Layer.Repositories.Address;
+using _01_Domain.Layer.Entities;
+using _04_Persistence.Layer.Context;
 
 namespace _04_Persistence.Layer.IoC
 {

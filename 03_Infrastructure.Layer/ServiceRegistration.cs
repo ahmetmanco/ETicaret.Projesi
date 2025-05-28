@@ -1,8 +1,10 @@
 ﻿using _01_Domain.Layer.Enums;
+using _02_Application.Layer.Abstraction;
 using _02_Application.Layer.Abstraction.Storage;
 using _02_Application.Layer.Abstraction.Storage.Azure;
 using _03_Infrastructure.Layer.Services.Storage;
 using _03_Infrastructure.Layer.Services.Storage.Local;
+using _03_Infrastructure.Layer.Services.Token;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace _03_Infrastructure.Layer
@@ -12,6 +14,7 @@ namespace _03_Infrastructure.Layer
         public static void AddInfrastructureservices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IStorageService, StorageService>();
+            serviceCollection.AddScoped<ITokenHandler, TokenHandler>();
         }
 
         public static void AddStorage<T>(this IServiceCollection serviceCollection) where T : Storage, IStorage
