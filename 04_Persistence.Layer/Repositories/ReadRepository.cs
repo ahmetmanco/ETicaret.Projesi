@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace _04_Persistence.Layer.Repositories
 {
-    public class ReadRepository<T> : IReadRepository<T> where T : BaseEntity
+    public class ReadRepository<T> : IReadRepository<T> where T : class, IBaseEntity
     {
         private readonly AppDbContext _context;
 

@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text;
+using System.Text.Json.Serialization;
+using _01_Domain.Layer.Entities;
 using _02_Application.Layer;
 using _02_Application.Layer.Validations.Product;
 using _03_Infrastructure.Layer;
@@ -10,7 +12,9 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Azure.Storage.Blobs;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,10 +33,22 @@ builder.Services.AddControllers(options =>
     options.JsonSerializerOptions.IncludeFields = true;
     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
 });
-
 // 3. FluentValidation
 builder.Services.AddValidatorsFromAssemblyContaining<CreateProductValidation>();
-
+builder.Services.AddAuthentication("Admin")
+    .AddJwtBearer(opt =>
+    {
+        opt.TokenValidationParameters = new()
+        {
+            ValidateAudience = true, //hangi sitelerin
+            ValidateIssuer = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidAudience = builder.Configuration["Token:Audience"],
+            ValidIssuer = builder.Configuration["Token:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Token:SecurityKey"))
+        };
+    });
 // 4. CORS
 builder.Services.AddCors(opt =>
 {
@@ -68,13 +84,21 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
     containerBuilder.RegisterModule(new DependencyResolver());
 });
 
-// 10. Swagger (Opsiyonel)
-// builder.Services.AddEndpointsApiExplorer();
-// builder.Services.AddSwaggerGen();
+builder.Services.AddIdentity<AppUser, AppRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders(); // E-posta onayı, şifre sıfırlama gibi özellikler için
 
+// Cookie veya JWT kullanıyorsan ayrıca aşağıdaki gibi yapılandırmalısın:
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/login"; // frontend yönlendirme yolu
+    options.AccessDeniedPath = "/access-denied";
+});
+
+// Uygulama başlatılıyor
 var app = builder.Build();
 
-// 11. Middleware pipeline
+// Middleware pipeline
 if (app.Environment.IsDevelopment())
 {
     // app.UseSwagger();
@@ -82,10 +106,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();        // wwwroot kullanıyorsan
+app.UseStaticFiles();
 app.UseRouting();
-app.UseCors();               // CORS ayarları
-app.UseAuthorization();
+
+app.UseCors();               // CORS mutlaka Routing'den sonra, Auth'dan önce
+
+app.UseAuthentication();     // 👈 Identity varsa bu kesinlikle eklenmeli
+app.UseAuthorization();      // 👈 Ardından authorization geliyor
+
 app.MapControllers();
 
 app.Run();

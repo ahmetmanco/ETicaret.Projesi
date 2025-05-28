@@ -8,7 +8,7 @@ using _01_Domain.Layer.Base;
 
 namespace _02_Application.Layer.Repositories
 {
-    public interface IReadRepository<T> : IRepository<T> where T : BaseEntity
+    public interface IReadRepository<T> : IRepository<T> where T :class, IBaseEntity
     {
         IQueryable<T> GetAll(bool tracking = true);
         IQueryable<T> GetWhere(Expression<Func<T,bool>> predicate, bool tracking = true);

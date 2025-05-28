@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace _04_Persistence.Layer.Repositories
 {
-    public class WriteRepository<T> : IWriteRepository<T> where T : BaseEntity
+    public class WriteRepository<T> : IWriteRepository<T> where T : class, IBaseEntity
     {
         private readonly AppDbContext _context;
 

@@ -1,11 +1,12 @@
 ﻿using System.Reflection;
 using _01_Domain.Layer.Base;
 using _01_Domain.Layer.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace _04_Persistence.Layer.Context
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser, AppRole, string>
     {
         public AppDbContext(DbContextOptions opt) : base(opt) { }
         
