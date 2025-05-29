@@ -1,13 +1,15 @@
 ﻿using _02_Application.Layer.Features.Commands.AppUser.CreateUser;
 using _02_Application.Layer.Features.Commands.AppUser.LoginUser;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace _05_WebApi.Layer.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController, Authorize(AuthenticationSchemes = "Admin")]
+    
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;

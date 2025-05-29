@@ -12,6 +12,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Azure.Storage.Blobs;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -35,8 +36,8 @@ builder.Services.AddControllers(options =>
 });
 // 3. FluentValidation
 builder.Services.AddValidatorsFromAssemblyContaining<CreateProductValidation>();
-builder.Services.AddAuthentication("Admin")
-    .AddJwtBearer(opt =>
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer("Admin", opt =>
     {
         opt.TokenValidationParameters = new()
         {
@@ -46,10 +47,10 @@ builder.Services.AddAuthentication("Admin")
             ValidateIssuerSigningKey = true,
             ValidAudience = builder.Configuration["Token:Audience"],
             ValidIssuer = builder.Configuration["Token:Issuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Token:SecurityKey"))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"]!))
         };
     });
-// 4. CORS
+
 builder.Services.AddCors(opt =>
 {
     opt.AddDefaultPolicy(policy =>
@@ -109,10 +110,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseCors();               // CORS mutlaka Routing'den sonra, Auth'dan önce
+app.UseCors();        
 
-app.UseAuthentication();     // 👈 Identity varsa bu kesinlikle eklenmeli
-app.UseAuthorization();      // 👈 Ardından authorization geliyor
+app.UseAuthentication();   
+app.UseAuthorization();     
 
 app.MapControllers();
 

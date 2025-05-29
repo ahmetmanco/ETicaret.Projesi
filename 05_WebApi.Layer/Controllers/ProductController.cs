@@ -6,12 +6,13 @@ using _02_Application.Layer.Features.Commands.Product.UpdateProduct;
 using _02_Application.Layer.Features.Queries.Product.GetAllProducts;
 using _02_Application.Layer.Features.Queries.Product.GetByIdProduct;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace _05_WebApi.Layer.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController, Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IMediator _mediator;
