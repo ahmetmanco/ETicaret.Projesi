@@ -18,6 +18,7 @@ namespace _05_WebApi.Layer.Controllers
         {
             _mediator = mediator;
         }
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserCommandRequest request)
         {
