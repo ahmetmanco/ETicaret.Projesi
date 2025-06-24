@@ -24,7 +24,9 @@ namespace _02_Application.Layer.Features.Commands.AppUser.LoginUser
             if (user == null)
                 user = await _userManager.FindByEmailAsync(request.uname);
 
-            if (user == null) throw new NotFoundUserException();
+            if (user == null) 
+                throw new NotFoundUserException();
+
             if (user != null)
             {
                 SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, request.password, false);
@@ -38,10 +40,8 @@ namespace _02_Application.Layer.Features.Commands.AppUser.LoginUser
                     };
                 }
             }
-            return new LoginUserErrorCommandResponse()
-            {
-                Mesage = "Kullanıcı adi veya şifre hatalı"
-            };
+            throw new AuthenticationErrorException();
+            
         }
     }
 }

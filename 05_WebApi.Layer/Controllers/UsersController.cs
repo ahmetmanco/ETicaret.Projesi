@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace _05_WebApi.Layer.Controllers
 {
+    [AllowAnonymous]
     [Route("api/[controller]")]
-    [ApiController, Authorize(AuthenticationSchemes = "Admin")]
-    
+    [ApiController]
+    //, Authorize(AuthenticationSchemes = "")
+
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -27,7 +29,7 @@ namespace _05_WebApi.Layer.Controllers
         }
         
         [HttpPost("[action]")]
-        public async Task<IActionResult> Login(LoginUserCommandRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginUserCommandRequest request)
         {
             LoginUserCommandResponse response = await _mediator.Send(request);
             return Ok(response);
