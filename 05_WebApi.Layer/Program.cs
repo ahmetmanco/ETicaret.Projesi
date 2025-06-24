@@ -61,7 +61,7 @@ builder.Services.AddCors(opt =>
 
 // 5. PostgreSQL DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+     options.UseNpgsql(connectionString));
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 // 6. Application Layers
