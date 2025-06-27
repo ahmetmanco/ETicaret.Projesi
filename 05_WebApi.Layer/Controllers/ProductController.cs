@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace _05_WebApi.Layer.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController, Authorize]
+    [ApiController, Authorize(AuthenticationSchemes = "Admin")]
     public class ProductController : ControllerBase
     {
         private readonly IMediator _mediator;
