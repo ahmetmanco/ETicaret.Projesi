@@ -32,16 +32,10 @@ namespace _02_Application.Layer.Features.Commands.AppUser.GoogleLogin
 
             var settings = new GoogleJsonWebSignature.ValidationSettings
             {
-                Audience = new List<string>
-                {
-                    "785983913023-c98fbq70qm7e9h2sa4ml82bhs00cl6c2.apps.googleusercontent.com",
-                    "785983913023-c98fbq70qm7e9h2sa4ml82bhs00cl6c2.apps.googleusercontent.com" 
-                }
+                Audience = new List<string> { "785983913023-c98fbq70qm7e9h2sa4ml82bhs00cl6c2.apps.googleusercontent.com" }
             };
 
-            // Token doğrulama
             var payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken, settings);
-
             var user = await _userManager.FindByEmailAsync(payload.Email);
 
             if (user == null)
@@ -58,14 +52,20 @@ namespace _02_Application.Layer.Features.Commands.AppUser.GoogleLogin
                 if (!createResult.Succeeded)
                     throw new Exception("Kullanıcı oluşturulamadı");
             }
+            var userLoginInfo = new UserLoginInfo(
+                loginProvider: "Google",
+                providerKey: payload.Subject, // Google'ın unique kullanıcı ID'si
+                displayName: payload.Name);
 
-            // Token oluştur
-            var token = _tokenHandler.CreatedAccessToken(5);
-
-            return new GoogleLoginCommandResponse
+            var addLoginResult = await _userManager.AddLoginAsync(user, userLoginInfo);
+            if (!addLoginResult.Succeeded)
             {
-                Token = token
-            };
+                throw new Exception($"External login kaydı başarısız: {string.Join(", ", addLoginResult.Errors)}");
+            }
+
+            var token = _tokenHandler.CreatedAccessToken(60); // 60 dakikalık token
+
+            return new GoogleLoginCommandResponse { Token = token };
         }
     }
 }
