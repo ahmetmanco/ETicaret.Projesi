@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using _02_Application.Layer.Abstraction;
-using _02_Application.Layer.Abstraction.JWT;
+﻿using _02_Application.Layer.Abstraction;
 using Google.Apis.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -30,42 +24,64 @@ namespace _02_Application.Layer.Features.Commands.AppUser.GoogleLogin
             if (string.IsNullOrEmpty(request.IdToken))
                 throw new Exception("Geçersiz token");
 
+            var payload = await ValidateGoogleToken(request.IdToken);
+
+            var user = await FindOrCreate(payload);
+
+            await AddExternalLogin(user, payload);
+            var token = _tokenHandler.CreatedAccessToken(5);
+
+            return new GoogleLoginCommandResponse { Token = token };
+        }
+
+        private async Task<_01_Domain.Layer.Entities.AppUser> FindOrCreate(GoogleJsonWebSignature.Payload payload)
+        {
+            var user = await _userManager.FindByEmailAsync(payload.Email);
+            if (user == null)
+            {
+                user = new()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Email = payload.Email,
+                    UserName = payload.Email,
+                    FirstName = payload.GivenName,
+                    LastName = payload.FamilyName,
+                    EmailConfirmed = true
+                };
+                var createResult = await _userManager.CreateAsync(user);
+                if(!createResult.Succeeded)
+                    throw new Exception($"Kullanıcı oluşturulamadı : {string.Join(", ", createResult.Errors)}");    
+            }
+            return user;
+        }
+
+        private async Task AddExternalLogin(_01_Domain.Layer.Entities.AppUser appUser, GoogleJsonWebSignature.Payload payload)
+        {
+            var userLoginInfo = new UserLoginInfo(
+                loginProvider: "Google",
+                providerKey: payload.Subject,
+                displayName: payload.Name
+                );
+            var result = await _userManager.AddLoginAsync(appUser, userLoginInfo);
+            if(!result.Succeeded)
+                throw new Exception($"External login eklenemedi: {string.Join(", ", result.Errors)}");
+        }
+
+        private async Task<GoogleJsonWebSignature.Payload> ValidateGoogleToken(string idToken)
+        {
             var settings = new GoogleJsonWebSignature.ValidationSettings
             {
                 Audience = new List<string> { "785983913023-c98fbq70qm7e9h2sa4ml82bhs00cl6c2.apps.googleusercontent.com" }
             };
 
-            var payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken, settings);
-            var user = await _userManager.FindByEmailAsync(payload.Email);
-
-            if (user == null)
+            try
             {
-                user = new _01_Domain.Layer.Entities.AppUser
-                {
-                    Email = payload.Email,
-                    UserName = payload.Email,
-                    FirstName = payload.GivenName,
-                    LastName = payload.FamilyName
-                };
-
-                var createResult = await _userManager.CreateAsync(user);
-                if (!createResult.Succeeded)
-                    throw new Exception("Kullanıcı oluşturulamadı");
+                return await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
             }
-            var userLoginInfo = new UserLoginInfo(
-                loginProvider: "Google",
-                providerKey: payload.Subject, // Google'ın unique kullanıcı ID'si
-                displayName: payload.Name);
-
-            var addLoginResult = await _userManager.AddLoginAsync(user, userLoginInfo);
-            if (!addLoginResult.Succeeded)
+            catch (InvalidJwtException e)
             {
-                throw new Exception($"External login kaydı başarısız: {string.Join(", ", addLoginResult.Errors)}");
+                throw new Exception("Geçersiz Google Token ", e);
             }
-
-            var token = _tokenHandler.CreatedAccessToken(60); // 60 dakikalık token
-
-            return new GoogleLoginCommandResponse { Token = token };
         }
     }
 }
