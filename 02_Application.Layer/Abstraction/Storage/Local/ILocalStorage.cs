@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _02_Application.Layer.Abstraction.Storage.Local
 {
-    public interface ILocalService : IStorage
+    public interface ILocalStorage : IStorage
     {
     }
 }

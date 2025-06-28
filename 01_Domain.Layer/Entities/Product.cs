@@ -8,12 +8,12 @@ namespace _01_Domain.Layer.Entities
         public string Name { get; set; }
         public int Stock { get; set; }
         public decimal Price { get; set; }
+        public string? Image { get; set; }
         public ICollection<Order>? Orders { get; set; }
-        public int ProductImageFileId { get; set; }
         public ProductImageFile ProductImageFile { get; set; }
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         public Customer? Customer { get; set; }
-        public Guid AppUserId { get; set; }
-        public AppUser AppUser { get; set; }
+        public string? AppUserId { get; set; }
+        public AppUser? AppUser { get; set; }
     }
 }

@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace _02_Application.Layer.Repositories
 {
-    public interface IRepository <T> where T : BaseEntity
+    public interface IRepository <T> where T :class, IBaseEntity
     {
-        public DbSet<T> Table { get; set; }
+        DbSet<T> Table { get; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35919.96 d17.13
+VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
@@ -12,6 +12,20 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01_Domain.Layer", "01_Domain.Layer\01_Domain.Layer.csproj", "{00C5374F-F938-43D9-B067-EBA247BF4FA9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "02_Application.Layer", "02_Application.Layer\02_Application.Layer.csproj", "{D56BD9AC-3B9C-4B2E-9B22-73F318FA756A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "03_Infrastructure.Layer", "03_Infrastructure.Layer\03_Infrastructure.Layer.csproj", "{9AF8D2DF-0506-42D0-97EF-4FCAF4DFDB4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04_Persistence.Layer", "04_Persistence.Layer\04_Persistence.Layer.csproj", "{1F30F959-8B5E-47FE-AE4A-56B1722648C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05_WebApi.Layer", "05_WebApi.Layer\05_WebApi.Layer.csproj", "{286619D3-9AAD-400C-9C3D-EF8990E1D265}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "k8s-configs", "k8s-configs", "{C527981F-7C7E-4B55-B3B6-1FD08633FA3F}"
+	ProjectSection(SolutionItems) = preProject
+		postgres-deployment.yaml = postgres-deployment.yaml
+		postgres-service.yaml = postgres-service.yaml
+		redis-deployment.yaml = redis-deployment.yaml
+		redis-service.yaml = redis-service.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +41,18 @@ Global
 		{D56BD9AC-3B9C-4B2E-9B22-73F318FA756A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D56BD9AC-3B9C-4B2E-9B22-73F318FA756A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D56BD9AC-3B9C-4B2E-9B22-73F318FA756A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AF8D2DF-0506-42D0-97EF-4FCAF4DFDB4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AF8D2DF-0506-42D0-97EF-4FCAF4DFDB4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AF8D2DF-0506-42D0-97EF-4FCAF4DFDB4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AF8D2DF-0506-42D0-97EF-4FCAF4DFDB4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F30F959-8B5E-47FE-AE4A-56B1722648C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F30F959-8B5E-47FE-AE4A-56B1722648C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F30F959-8B5E-47FE-AE4A-56B1722648C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F30F959-8B5E-47FE-AE4A-56B1722648C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{286619D3-9AAD-400C-9C3D-EF8990E1D265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{286619D3-9AAD-400C-9C3D-EF8990E1D265}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{286619D3-9AAD-400C-9C3D-EF8990E1D265}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{286619D3-9AAD-400C-9C3D-EF8990E1D265}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -34,6 +60,9 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{00C5374F-F938-43D9-B067-EBA247BF4FA9} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{D56BD9AC-3B9C-4B2E-9B22-73F318FA756A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{9AF8D2DF-0506-42D0-97EF-4FCAF4DFDB4A} = {7098D5F5-67BB-43C1-8DEA-245FD56651F0}
+		{1F30F959-8B5E-47FE-AE4A-56B1722648C9} = {7098D5F5-67BB-43C1-8DEA-245FD56651F0}
+		{286619D3-9AAD-400C-9C3D-EF8990E1D265} = {C993B853-8CBF-4ED5-8C2E-EF91AE1A4996}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4BA09F06-0EAA-4612-B2C0-E5FC80940B17}
