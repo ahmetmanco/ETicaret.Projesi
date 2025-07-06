@@ -1,39 +1,33 @@
-﻿using _02_Application.Layer.Exceptions;
+﻿using _02_Application.Layer.Abstraction.Services.UserService;
+using _02_Application.Layer.DTO_s.Users;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 
 namespace _02_Application.Layer.Features.Commands.AppUser.CreateUser
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommandRequest, CreateUserCommandResponse>
     {
-        private readonly UserManager<_01_Domain.Layer.Entities.AppUser> _userManager;
+        private readonly IUserService _userService;
 
-        public CreateUserCommandHandler(UserManager<_01_Domain.Layer.Entities.AppUser> userManager)
+        public CreateUserCommandHandler(IUserService userService)
         {
-            _userManager = userManager;
+            _userService = userService;
         }
 
         public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
         {
-            IdentityResult result = await _userManager.CreateAsync(new()
+           CreateUserResponse response = await _userService.CreateAsync(new()
+           {
+               uname = request.uname,
+               confirmPassword = request.confirmPassword,
+               email = request.email,
+               password = request.password
+           });
+
+            return new()
             {
-                Id = Guid.NewGuid().ToString(),
-                UserName = request.uname,
-                Email = request.email,
-            }, request.password);
-            if (result.Succeeded)
-            {
-                return new()
-                {
-                    Message = " Kullanıcı başarıyla yüklendi",
-                    Succeeded = true
-                };
-            }
-            else
-                return new()
-                {
-                    Succeeded = false,
-                };
+                Message = response.Message,
+                Succeeded = response.Succeeded,
+            };
         }
     }
 }

@@ -7,6 +7,8 @@ using _04_Persistence.Layer.Repositories;
 using _04_Persistence.Layer.Repositories.Address;
 using _01_Domain.Layer.Entities;
 using _04_Persistence.Layer.Context;
+using _04_Persistence.Layer.Services.User;
+using _02_Application.Layer.Abstraction.Services.UserService;
 
 namespace _04_Persistence.Layer.IoC
 {
@@ -45,6 +47,8 @@ namespace _04_Persistence.Layer.IoC
 
             builder.RegisterType<InvoiceFileReadRepository>().As<IInvoiceFileReadRepository>().InstancePerLifetimeScope();
             builder.RegisterType<InvoiceFileWriteRepository>().As<IInvoiceFileWriteRepository>().InstancePerLifetimeScope();
+
+            builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
 
             builder.Register(c =>
             {

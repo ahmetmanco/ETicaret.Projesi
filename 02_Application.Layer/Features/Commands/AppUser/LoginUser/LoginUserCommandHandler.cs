@@ -1,47 +1,46 @@
 ﻿using _02_Application.Layer.Abstraction;
 using _02_Application.Layer.Abstraction.JWT;
+using _02_Application.Layer.Abstraction.Services.UserService;
+using _02_Application.Layer.DTO_s.Users.LoginUser;
 using _02_Application.Layer.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using static _02_Application.Layer.DTO_s.Users.LoginUser.LoginUserResponse;
 
 namespace _02_Application.Layer.Features.Commands.AppUser.LoginUser
 {
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, LoginUserCommandResponse>
     {
-        private readonly UserManager<_01_Domain.Layer.Entities.AppUser> _userManager;
-        private readonly SignInManager<_01_Domain.Layer.Entities.AppUser> _signInManager;
-        private readonly ITokenHandler _tokenHandler;
-        public LoginUserCommandHandler(UserManager<_01_Domain.Layer.Entities.AppUser> userManager, SignInManager<_01_Domain.Layer.Entities.AppUser> signInManager, ITokenHandler tokenHandler)
+
+        private readonly IUserService _userService;
+        public LoginUserCommandHandler(IUserService userService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _tokenHandler = tokenHandler;
+            _userService = userService;
         }
 
         public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
         {
-            _01_Domain.Layer.Entities.AppUser user = await _userManager.FindByNameAsync(request.uname);
-            if (user == null)
-                user = await _userManager.FindByEmailAsync(request.uname);
-
-            if (user == null) 
-                throw new NotFoundUserException();
-
-            if (user != null)
+            LoginUserResponse response = await _userService.LoginUserAsync(new()
             {
-                SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, request.password, false);
-                if (result.Succeeded) //Authentication başarılı
+                uname = request.uname,
+                password = request.password
+            });
+
+            if (response is LoginUserSuccessResponse successResponse)
+            {
+                return new LoginUserSuccessCommandResponse()
                 {
-                    //Yetkilendirme 
-                    Token token = _tokenHandler.CreatedAccessToken(5);
-                    return new LoginUserSuccessCommandResponse()
-                    {
-                        Token = token,
-                    };
-                }
+                    Token = successResponse.Token
+                };
+            }
+            else if (response is LoginUserErrorResponse errorResponse)
+            {
+                return new LoginUserErrorCommandResponse()
+                {
+                    Message = errorResponse.Mesage
+                };
             }
             throw new AuthenticationErrorException();
-            
         }
     }
 }
