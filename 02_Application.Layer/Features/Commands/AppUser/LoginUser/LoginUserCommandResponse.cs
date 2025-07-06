@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using _02_Application.Layer.Abstraction.JWT;
+﻿using _02_Application.Layer.Abstraction.JWT;
 
 namespace _02_Application.Layer.Features.Commands.AppUser.LoginUser
 {
@@ -18,6 +13,6 @@ namespace _02_Application.Layer.Features.Commands.AppUser.LoginUser
 
     public class LoginUserErrorCommandResponse : LoginUserCommandResponse
     {
-        public string Mesage { get; set; }
+        public string Message { get; set; }
     }
 }

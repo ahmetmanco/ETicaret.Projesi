@@ -10,10 +10,3 @@ namespace _02_Application.Layer.Features.Commands.AppUser.CreateUser
         public string confirmPassword { get; set; }
     }
 }
-//export class User
-//{
-//    uname!: string;
-//  email!: string;
-//  password!: string;
-//  confirmPassword!: string;
-//}

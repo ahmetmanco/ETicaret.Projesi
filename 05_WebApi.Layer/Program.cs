@@ -19,11 +19,10 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Configuration (ConnectionStrings & Azure Storage)
+// Configuration (ConnectionStrings & Azure Storage)
 var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
 var azureBlobConnection = builder.Configuration.GetSection("Storage")["Azure"];
 
-// 2. Services: MVC + JSON Options
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ValidationFilters>();
@@ -34,7 +33,7 @@ builder.Services.AddControllers(options =>
     options.JsonSerializerOptions.IncludeFields = true;
     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
 });
-// 3. FluentValidation
+
 builder.Services.AddValidatorsFromAssemblyContaining<CreateProductValidation>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer("Admin", opt =>
@@ -59,26 +58,23 @@ builder.Services.AddCors(opt =>
               .AllowAnyMethod());
 });
 
-// 5. PostgreSQL DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
      options.UseNpgsql(connectionString));
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-// 6. Application Layers
 builder.Services.AddInfrastructureservices();
 builder.Services.AddApplicationServices();
 
-// 7. Blob Storage Client (Azure)
+// Blob Storage Client (Azure)
 builder.Services.AddSingleton(_ => new BlobServiceClient(azureBlobConnection));
 builder.Services.AddStorage<AzureStorage>();
 
-// 8. MediatR (CQRS)
+// MediatR (CQRS)
 builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(_02_Application.Layer.ServiceRegistration).Assembly);
 });
 
-// 9. Autofac Dependency Injection
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
@@ -87,16 +83,14 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 
 builder.Services.AddIdentity<AppUser, AppRole>()
     .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders(); // E-posta onayı, şifre sıfırlama gibi özellikler için
+    .AddDefaultTokenProviders(); 
 
-// Cookie veya JWT kullanıyorsan ayrıca aşağıdaki gibi yapılandırmalısın:
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/login"; // frontend yönlendirme yolu
+    options.LoginPath = "/login"; 
     options.AccessDeniedPath = "/access-denied";
 });
 
-// Uygulama başlatılıyor
 var app = builder.Build();
 
 // Middleware pipeline
