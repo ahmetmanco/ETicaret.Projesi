@@ -1,4 +1,5 @@
 ﻿using _01_Domain.Layer.Base;
+using _01_Domain.Layer.Enums;
 
 namespace _01_Domain.Layer.Entities
 {
@@ -9,6 +10,8 @@ namespace _01_Domain.Layer.Entities
         public ICollection<Order>? Orders { get; set; }
         public int ProductId { get; set; }
         public ICollection<Product> Products { get; set; }
+        public int? StatusId { get; set; }
+        public Status? Status { get; set; }
 
     }
 }

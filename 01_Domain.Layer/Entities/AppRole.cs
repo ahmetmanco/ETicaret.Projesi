@@ -9,5 +9,16 @@ namespace _01_Domain.Layer.Entities
 {
     public class AppRole : IdentityRole<string>
     {
+        public AppRole() : base()
+        {
+            Id = Guid.NewGuid().ToString(); 
+            ConcurrencyStamp = Guid.NewGuid().ToString();
+        }
+        public AppRole(string roleName) : this()
+        {
+            Name = roleName;
+            NormalizedName = roleName.ToUpperInvariant();
+        }
+
     }
 }

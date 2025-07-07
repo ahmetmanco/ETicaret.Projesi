@@ -263,8 +263,20 @@ namespace _04_Persistence.Layer.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<int?>("Rol")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RolId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
@@ -333,6 +345,12 @@ namespace _04_Persistence.Layer.Migrations
                         .HasColumnType("text");
 
                     b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("StatusId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedDate")
@@ -443,6 +461,12 @@ namespace _04_Persistence.Layer.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -484,6 +508,12 @@ namespace _04_Persistence.Layer.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Stock")
                         .HasColumnType("integer");
