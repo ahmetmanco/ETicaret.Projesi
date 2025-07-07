@@ -23,9 +23,14 @@ namespace _04_Persistence.Layer.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //builder.Entity<AppUser>().HasData(
+            //   new AppRole { Id = Guid.NewGuid().ToString(), Name = "Admin", NormalizedName = "ADMIN" },
+            //   new AppRole { Id = Guid.NewGuid().ToString(), Name = "Customer", NormalizedName = "CUSTOMER" },
+            //   new AppRole { Id = Guid.NewGuid().ToString(), Name = "Seller", NormalizedName = "SELLER" }
+            //   );
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-            foreach(var foreingKey in builder.Model.GetEntityTypes().SelectMany(x=> x.GetForeignKeys()))
+           
+            foreach (var foreingKey in builder.Model.GetEntityTypes().SelectMany(x=> x.GetForeignKeys()))
             {
                 foreingKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
